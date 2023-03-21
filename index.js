@@ -34,7 +34,7 @@ bot.on("messageCreate", async (msg) => {
 });
 
 bot.on("error", (err) => {
-  console.warn(err);
+  console.log("Connected error", err);
 });
 
 const PORT = 8999;
