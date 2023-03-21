@@ -37,10 +37,13 @@ bot.on("error", (err) => {
   console.warn(err);
 });
 
-bot.connect();
-
 const PORT = 8999;
 
+app.get("/status", async (req, res) => {
+  return res.status(200).json({ status: "OK" });
+});
+
 app.listen(PORT, () => {
+  bot.connect();
   console.log("Server is started in " + PORT);
 });
