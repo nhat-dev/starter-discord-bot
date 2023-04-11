@@ -56,9 +56,13 @@ app.get("/job", async (req, res) => {
     console.log("percent", percent);
     bot.createMessage(
       channelId,
-      `${upperCase(symbol)}/USDT : ${current_price}`
+      `${upperCase(symbol)}/USDT : ${current_price} ${
+        percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
+      }%`
     );
-    return res.status(200).json({ status: "OK" });
+    return res
+      .status(200)
+      .json({ status: "OK", price: current_price, change: percent });
   }
   return res.status(200).json({ status: "Fail" });
 });
