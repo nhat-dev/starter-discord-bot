@@ -46,25 +46,30 @@ app.get("/status", async (req, res) => {
 });
 
 app.get("/job", async (req, res) => {
-  const symbol = req.query.symbol ?? "";
-  if (symbol) {
-    const current_price = await getPrice(upperCase(symbol));
-    const last_price = get(prices, symbol, 0);
-    const div = last_price ? current_price / last_price : 2;
-    assign(prices, { [symbol]: current_price });
-    const percent = ((div - 1) * 100).toFixed(2);
-    console.log("percent", percent);
-    bot.createMessage(
-      channelId,
-      `${upperCase(symbol)}/USDT : ${current_price} ${
-        percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
-      }%`
-    );
-    return res
-      .status(200)
-      .json({ status: "OK", price: current_price, change: percent });
+  try {
+    const symbol = req.query.symbol ?? "";
+    if (symbol) {
+      const current_price = await getPrice(upperCase(symbol));
+      const last_price = get(prices, symbol, 0);
+      const div = last_price ? current_price / last_price : 2;
+      assign(prices, { [symbol]: current_price });
+      const percent = ((div - 1) * 100).toFixed(2);
+      console.log("percent", percent);
+      bot.createMessage(
+        channelId,
+        `${upperCase(symbol)}/USDT : ${current_price} ${
+          percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
+        }%`
+      );
+      return res
+        .status(200)
+        .json({ status: "OK", price: current_price, change: percent });
+    }
+    return res.status(200).json({ status: "Fail" });
+  } catch (error) {
+    console.log("error", error);
+    return res.status(500).json({ status: "Fail", message: error.message });
   }
-  return res.status(200).json({ status: "Fail" });
 });
 
 app.listen(PORT, async () => {
