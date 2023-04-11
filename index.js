@@ -52,7 +52,7 @@ app.get("/job", async (req, res) => {
     const last_price = get(prices, symbol, 0);
     const div = last_price ? current_price / last_price : 2;
     assign(prices, { [symbol]: current_price });
-    const percent = (div - 1) * 100;
+    const percent = ((div - 1) * 100).toFixed(2);
     console.log("percent", percent);
     bot.createMessage(
       channelId,

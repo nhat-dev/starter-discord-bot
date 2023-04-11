@@ -1,14 +1,15 @@
 const axios = require("axios");
-const { get, lowerCase } = require("lodash");
+const { get, lowerCase, upperCase } = require("lodash");
 const coins = require("./symbol.json");
 
 const getPrice = async (symbol) => {
-  const coin = coins.find((x) => x.symbol === lowerCase(symbol));
-  if (!coin) throw Error("coin is not found");
+  // const coin = coins.find((x) => x.symbol === lowerCase(symbol));
+  // if (!coin) throw Error("coin is not found");
   const res = await axios.default(
-    `https://api.coingecko.com/api/v3/coins/${coin.id}`
+    `https://api.binance.com/api/v3/avgPrice?symbol=${upperCase(symbol)}USDT`
   );
-  const value = get(res.data, "market_data.current_price.usd", 0);
+
+  const value = get(res.data, "price", 0);
   return value;
 };
 
