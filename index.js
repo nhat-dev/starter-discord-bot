@@ -18,22 +18,22 @@ bot.on("ready", () => {
   console.log("Connected and ready.");
 });
 
-bot.on("messageCreate", async (msg) => {
-  const symbol = ensureCommand(msg.content);
-  console.log("msg.channel.id", msg.channel.id);
+// bot.on("messageCreate", async (msg) => {
+//   const symbol = ensureCommand(msg.content);
+//   console.log("msg.channel.id", msg.channel.id);
 
-  if (symbol) {
-    try {
-      const price = await getPrice(upperCase(symbol));
-      bot.createMessage(msg.channel.id, `${upperCase(symbol)}/USDT : ${price}`);
-    } catch (error) {
-      bot.createMessage(
-        msg.channel.id,
-        `${upperCase(symbol)}/USDT : ${error.toString()}`
-      );
-    }
-  }
-});
+//   if (symbol) {
+//     try {
+//       const price = await getPrice(upperCase(symbol));
+//       bot.createMessage(msg.channel.id, `${upperCase(symbol)}/USDT : ${price}`);
+//     } catch (error) {
+//       bot.createMessage(
+//         msg.channel.id,
+//         `${upperCase(symbol)}/USDT : ${error.toString()}`
+//       );
+//     }
+//   }
+// });
 
 bot.on("error", (err) => {
   console.log("Connected error", err);
@@ -58,9 +58,18 @@ app.get("/job", async (req, res) => {
       console.log("percent", percent);
       bot.createMessage(
         channelId,
-        `${upperCase(symbol)}/USDT : ${current_price} ${
-          percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
-        }%`
+        {
+          embeds: [
+            {
+              title: `${upperCase(symbol)}/USDT`, // Title of the embed
+              description: `Giá hiện tại **${current_price}**`,
+              color: 0x000000,
+            },
+          ],
+        }
+        // `${upperCase(symbol)}/USDT : ${current_price} ${
+        //   percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
+        // }%`
       );
       return res
         .status(200)
@@ -72,6 +81,22 @@ app.get("/job", async (req, res) => {
     return res.status(500).json({ status: "Fail", message: error.message });
   }
 });
+
+app.get("/test", (req, res) => {
+  bot.createMessage(channelId, {
+    embeds: [
+      {
+        title: "AIDOGE/USDT", // Title of the embed
+        description: "Giá hiện tại **0.00000000011328**",
+        color: 0x000000,
+      },
+    ],
+  });
+
+  return res.json("ok");
+});
+
+// require("./bot")();
 
 app.listen(PORT, async () => {
   await bot.connect();
