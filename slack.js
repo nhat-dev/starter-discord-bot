@@ -9,6 +9,7 @@ const webhook = new IncomingWebhook(url);
 
 const sendSlack = async (title, description) => {
   await webhook.send({
+    text: `${title}\n${description}`,
     attachments: [
       {
         color: "#27ae60",
