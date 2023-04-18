@@ -2,7 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const eris = require("eris");
-const { startsWith, toUpper, upperCase, get, assign } = require("lodash");
+const {
+  startsWith,
+  toUpper,
+  upperCase,
+  get,
+  assign,
+  toNumber,
+} = require("lodash");
 const { getPrice } = require("./crawl");
 const bot = new eris.Client(process.env.BOT_TOKEN);
 const prices = {};
@@ -49,6 +56,7 @@ app.get("/job", async (req, res) => {
   try {
     const symbol = req.query.symbol ?? "";
     const market = req.query.market || "binance";
+    const quantity = toNumber(req.query.quantity || 0);
     if (symbol) {
       const current_price = await getPrice(upperCase(symbol), market);
       const last_price = get(prices, symbol, 0);
@@ -62,7 +70,9 @@ app.get("/job", async (req, res) => {
           embeds: [
             {
               title: `${upperCase(symbol)}/USDT`, // Title of the embed
-              description: `Giá hiện tại **${current_price}**`,
+              description: `Giá hiện tại **${current_price}**\nTổng giá trị **${toNumber(
+                current_price * quantity
+              ).toFixed(2)}** USDT`,
               color: 0x000000,
             },
           ],
