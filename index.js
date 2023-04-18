@@ -11,6 +11,7 @@ const {
   toNumber,
 } = require("lodash");
 const { getPrice } = require("./crawl");
+const { sendSlack } = require("./slack");
 const bot = new eris.Client(process.env.BOT_TOKEN);
 const prices = {};
 const channelId = "1076529411689562135";
@@ -80,6 +81,12 @@ app.get("/job", async (req, res) => {
         // `${upperCase(symbol)}/USDT : ${current_price} ${
         //   percent > 0 ? `↗↗↗ ${percent}` : `↘↘↘ ${percent}`
         // }%`
+      );
+      await sendSlack(
+        `*${upperCase(symbol)}/USDT*`,
+        `Giá hiện tại *${current_price}*\nTổng giá trị *${toNumber(
+          current_price * quantity
+        ).toFixed(2)}* USDT`
       );
       return res
         .status(200)
