@@ -48,7 +48,7 @@ app.get("/status", async (req, res) => {
 app.get("/job", async (req, res) => {
   try {
     const symbol = req.query.symbol ?? "";
-    const market = req.query.market ?? "binance";
+    const market = req.query.market || "binance";
     if (symbol) {
       const current_price = await getPrice(upperCase(symbol), market);
       const last_price = get(prices, symbol, 0);
@@ -68,7 +68,7 @@ app.get("/job", async (req, res) => {
     }
     return res.status(200).json({ status: "Fail" });
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
     return res.status(500).json({ status: "Fail", message: error.message });
   }
 });

@@ -11,7 +11,7 @@ const getMXCPrice = async (symbol) => {
 
   const $ = cheerio.load(res.data);
 
-  return toNumber($("span[class^='headline_title']").text() || 0);
+  return $("span[class^='headline_title']").text() || 0;
 };
 
 module.exports = {
