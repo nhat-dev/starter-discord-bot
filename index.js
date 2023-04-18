@@ -48,8 +48,9 @@ app.get("/status", async (req, res) => {
 app.get("/job", async (req, res) => {
   try {
     const symbol = req.query.symbol ?? "";
+    const market = req.query.market ?? "binance";
     if (symbol) {
-      const current_price = await getPrice(upperCase(symbol));
+      const current_price = await getPrice(upperCase(symbol), market);
       const last_price = get(prices, symbol, 0);
       const div = last_price ? current_price / last_price : 2;
       assign(prices, { [symbol]: current_price });
