@@ -26,22 +26,22 @@ bot.on("ready", () => {
   console.log("Connected and ready.");
 });
 
-// bot.on("messageCreate", async (msg) => {
-//   const symbol = ensureCommand(msg.content);
-//   console.log("msg.channel.id", msg.channel.id);
+bot.on("messageCreate", async (msg) => {
+  const symbol = ensureCommand(msg.content);
+  console.log("msg.channel.id", msg.channel.id);
 
-//   if (symbol) {
-//     try {
-//       const price = await getPrice(upperCase(symbol));
-//       bot.createMessage(msg.channel.id, `${upperCase(symbol)}/USDT : ${price}`);
-//     } catch (error) {
-//       bot.createMessage(
-//         msg.channel.id,
-//         `${upperCase(symbol)}/USDT : ${error.toString()}`
-//       );
-//     }
-//   }
-// });
+  if (symbol) {
+    try {
+      const price = await getPrice(upperCase(symbol));
+      bot.createMessage(msg.channel.id, `${upperCase(symbol)}/USDT : ${price}`);
+    } catch (error) {
+      bot.createMessage(
+        msg.channel.id,
+        `${upperCase(symbol)}/USDT : ${error.toString()}`
+      );
+    }
+  }
+});
 
 bot.on("error", (err) => {
   console.log("Connected error", err);
