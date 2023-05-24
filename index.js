@@ -114,10 +114,38 @@ app.get("/test", (req, res) => {
   return res.json("ok");
 });
 
-app.get("/updateLocation", (req, res) => {
-  const lat = req.query.lat || 0;
-  const lng = req.query.lng || 0;
-  bot.createMessage("1110778541471182869", `Location: ${lat} ${lng}`);
+app.post("/createOrderTracking", (req, res) => {
+  const {
+    fromLatitude,
+    fromLongitude,
+    toLatitude,
+    toLongitude,
+    originalNumber,
+  } = req.body || {};
+
+  bot.createMessage("1110778541471182869", {
+    embeds: [
+      {
+        title: "Create Order tracking",
+        description: `Order: ${originalNumber}\nFrom: ${fromLatitude};${fromLongitude}\nTo: ${toLatitude};${toLongitude}`,
+        color: 0x000000,
+      },
+    ],
+  });
+  return res.json("ok");
+});
+
+app.post("/updateLocation", (req, res) => {
+  const { longitude, latitude, originalNumber } = req.body || {};
+  bot.createMessage("1110778541471182869", {
+    embeds: [
+      {
+        title: "Update Location", // Title of the embed
+        description: `Order: ${originalNumber}\nCurrent position: ${longitude};${latitude}`,
+        color: 0x000000,
+      },
+    ],
+  });
   return res.json("ok");
 });
 
