@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const eris = require("eris");
+const bodyParser = require("body-parser");
+
 const {
   startsWith,
   toUpper,
@@ -15,6 +17,12 @@ const { sendSlack } = require("./slack");
 const bot = new eris.Client(process.env.BOT_TOKEN);
 const prices = {};
 const channelId = "1076529411689562135";
+
+// support parsing of application/json type post data
+app.use(bodyParser.json());
+
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const ensureCommand = (content) => {
   if (!content) return "";
@@ -136,6 +144,7 @@ app.post("/createOrderTracking", (req, res) => {
 });
 
 app.post("/updateLocation", (req, res) => {
+  console.log("req.body", req.body);
   const { longitude, latitude, originalNumber } = req.body || {};
   bot.createMessage("1110778541471182869", {
     embeds: [
