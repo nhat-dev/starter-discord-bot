@@ -27,6 +27,7 @@ bot.on("ready", () => {
 });
 
 bot.on("messageCreate", async (msg) => {
+  console.log("helllo....", msg);
   const symbol = ensureCommand(msg.content);
   console.log("msg.channel.id", msg.channel.id);
 
@@ -104,7 +105,7 @@ app.get("/test", (req, res) => {
     embeds: [
       {
         title: "AIDOGE/USDT", // Title of the embed
-        description: "Giá hiện tại **0.00000000011328**",
+        description: "https://www.youtube.com/watch?v=IwzkfMmNMpM",
         color: 0x000000,
       },
     ],
@@ -113,7 +114,14 @@ app.get("/test", (req, res) => {
   return res.json("ok");
 });
 
-// require("./bot")();
+app.get("/updateLocation", (req, res) => {
+  const lat = req.query.lat || 0;
+  const lng = req.query.lng || 0;
+  bot.createMessage("1110778541471182869", `Location: ${lat} ${lng}`);
+  return res.json("ok");
+});
+
+require("./bot")();
 
 app.listen(PORT, async () => {
   await bot.connect();
